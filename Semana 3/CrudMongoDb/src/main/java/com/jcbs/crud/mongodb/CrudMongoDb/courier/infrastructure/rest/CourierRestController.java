@@ -4,6 +4,7 @@ import com.jcbs.crud.mongodb.CrudMongoDb.courier.application.command.CreateCouri
 import com.jcbs.crud.mongodb.CrudMongoDb.courier.application.query.GetCourierQuery;
 import com.jcbs.crud.mongodb.CrudMongoDb.courier.dto.request.CreateCourierRequest;
 import com.jcbs.crud.mongodb.CrudMongoDb.courier.dto.response.GetCourierResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +15,10 @@ import java.util.List;
 @RequestMapping("/api/couriers")
 public class CourierRestController {
 
+    @Autowired
     private CreateCourierCommand createCourierCommand;
 
+    @Autowired
     private GetCourierQuery getCourierQuery;
 
     @PostMapping

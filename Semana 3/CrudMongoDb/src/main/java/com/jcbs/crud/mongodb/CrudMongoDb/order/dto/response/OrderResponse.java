@@ -22,7 +22,8 @@ public class OrderResponse {
 
     private String description;
     private Double price;
-    private OrderEnum Status;
+    private OrderEnum status;
     private LocalDateTime createdAt;
     private LocalDateTime deliveredAt;
+    private String courierId;
 }

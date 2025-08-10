@@ -3,12 +3,14 @@ package com.jcbs.crud.mongodb.CrudMongoDb.order.service.command;
 import com.jcbs.crud.mongodb.CrudMongoDb.order.application.command.DeleteOrderCommand;
 import com.jcbs.crud.mongodb.CrudMongoDb.order.domain.repository.OrderRepository;
 import com.jcbs.crud.mongodb.CrudMongoDb.order.dto.mapper.OrderMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DeleteOrderService implements DeleteOrderCommand {
 
     private final OrderRepository orderRepository;
+    @Autowired
     private OrderMapper orderMapper;
 
     public DeleteOrderService(OrderRepository orderRepository) {

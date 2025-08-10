@@ -1,10 +1,14 @@
 package com.jcbs.crud.mongodb.CrudMongoDb.order.service.command;
 
+import com.jcbs.crud.mongodb.CrudMongoDb.courier.domain.model.Courier;
+import com.jcbs.crud.mongodb.CrudMongoDb.courier.domain.model.courierEnum.EnumCourierStatus;
+import com.jcbs.crud.mongodb.CrudMongoDb.courier.domain.repository.CourierRepository;
 import com.jcbs.crud.mongodb.CrudMongoDb.order.application.command.UpdateStatusCommand;
 import com.jcbs.crud.mongodb.CrudMongoDb.order.domain.model.Order;
 import com.jcbs.crud.mongodb.CrudMongoDb.order.domain.model.OrderEnum.OrderEnum;
 import com.jcbs.crud.mongodb.CrudMongoDb.order.domain.repository.OrderRepository;
 import com.jcbs.crud.mongodb.CrudMongoDb.order.dto.mapper.OrderMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.EnumMap;
@@ -15,7 +19,11 @@ import java.util.function.Predicate;
 public class UpdateOrderStatusService implements UpdateStatusCommand {
 
     private final OrderRepository orderRepository;
+    @Autowired
     private OrderMapper orderMapper;
+
+    @Autowired
+    private CourierRepository courierRepository;
 
     private static final Map<OrderEnum, Predicate<OrderEnum>> VALID_TRANSITIONS = new EnumMap<>(OrderEnum.class);
 
@@ -36,6 +44,9 @@ public class UpdateOrderStatusService implements UpdateStatusCommand {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
 
+        Courier courier = courierRepository.findById(order.getCourierId())
+                .orElseThrow(() -> new RuntimeException("Courier not found with id: " + order.getCourierId()));
+
         OrderEnum currentStatus = order.getStatus();
 
         boolean isValid = VALID_TRANSITIONS.getOrDefault(status, prev -> false).test(currentStatus);
@@ -44,6 +55,12 @@ public class UpdateOrderStatusService implements UpdateStatusCommand {
             throw new IllegalStateException(
                     String.format("Cannot change status from %s to %s", currentStatus, status)
             );
+        }
+
+        if (status.equals(OrderEnum.DELIVERED)){
+            order.setDeliveredAt(java.time.LocalDateTime.now());
+            courier.setStatus(EnumCourierStatus.DISPONIBLE);
+            courierRepository.save(courier);
         }
 
         order.setStatus(status);

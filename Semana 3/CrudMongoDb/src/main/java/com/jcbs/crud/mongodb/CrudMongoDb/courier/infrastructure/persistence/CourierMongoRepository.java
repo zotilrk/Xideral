@@ -1,6 +1,7 @@
 package com.jcbs.crud.mongodb.CrudMongoDb.courier.infrastructure.persistence;
 
 import com.jcbs.crud.mongodb.CrudMongoDb.courier.domain.model.Courier;
+import com.jcbs.crud.mongodb.CrudMongoDb.courier.domain.model.courierEnum.EnumCourierStatus;
 import com.jcbs.crud.mongodb.CrudMongoDb.courier.domain.repository.CourierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -27,5 +28,10 @@ public class CourierMongoRepository implements CourierRepository {
     @Override
     public List<Courier> findAll() {
         return springRepo.findAll();
+    }
+
+    @Override
+    public List<Courier> findByStatus(EnumCourierStatus status) {
+        return springRepo.findByStatus(status);
     }
 }

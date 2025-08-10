@@ -17,5 +17,4 @@ public class CreateCourierRequest {
     private String name;
     private String phone;
     private String vehicleType;
-    private Boolean available;
 }
