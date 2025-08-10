@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,4 +25,5 @@ public class Courier {
     private String vehicleType;
     private Boolean available;
     private Double rating;
+    private LocalDateTime createdAt;
 }
