@@ -1,0 +1,12 @@
+com/tuempresa/batch/mapping/CustomerMapper.class
+com/tuempresa/batch/domain/mongo/CustomerDoc$CustomerDocBuilder.class
+com/tuempresa/batch/domain/mongo/CustomerDocRepository.class
+com/tuempresa/batch/domain/mongo/CustomerDoc.class
+com/tuempresa/batch/domain/postgres/CustomerEntity$CustomerEntityBuilder.class
+com/tuempresa/batch/BatchApplication.class
+com/tuempresa/batch/config/DataSourceConfig.class
+com/tuempresa/batch/domain/postgres/CustomerEntity.class
+com/tuempresa/batch/domain/postgres/CustomerRepository.class
+com/tuempresa/batch/mapping/CustomerMapperImpl.class
+com/tuempresa/batch/controller/BatchController.class
+com/tuempresa/batch/job/BatchConfig.class

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BatchConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-batch-pg-mongo</a> &gt; <a href="index.source.html" class="el_package">com.tuempresa.batch.job</a> &gt; <span class="el_source">BatchConfig.java</span></div><h1>BatchConfig.java</h1><pre class="source lang-java linenums">package com.tuempresa.batch.job;
+
+import com.tuempresa.batch.domain.mongo.CustomerDoc;
+import com.tuempresa.batch.domain.mongo.CustomerDocRepository;
+import com.tuempresa.batch.domain.postgres.CustomerEntity;
+import com.tuempresa.batch.domain.postgres.CustomerRepository;
+import com.tuempresa.batch.mapping.CustomerMapper;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.Step;
+import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.data.RepositoryItemWriter;
+import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
+import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Sort;
+import org.springframework.transaction.PlatformTransactionManager;
+
+import java.util.Map;
+
+@Configuration
+<span class="fc" id="L26">public class BatchConfig {</span>
+
+    @Bean
+    public org.springframework.batch.item.data.RepositoryItemReader&lt;CustomerEntity&gt; customerReader(CustomerRepository repository) {
+<span class="fc" id="L30">        return new RepositoryItemReaderBuilder&lt;CustomerEntity&gt;()</span>
+<span class="fc" id="L31">                .name(&quot;customerReader&quot;)</span>
+<span class="fc" id="L32">                .repository(repository)</span>
+<span class="fc" id="L33">                .methodName(&quot;findAll&quot;)</span>
+<span class="fc" id="L34">                .pageSize(100)</span>
+<span class="fc" id="L35">                .sorts(Map.of(&quot;id&quot;, Sort.Direction.ASC))</span>
+<span class="fc" id="L36">                .build();</span>
+    }
+
+    @Bean
+    public ItemProcessor&lt;CustomerEntity, CustomerDoc&gt; customerProcessor(CustomerMapper mapper) {
+<span class="fc" id="L41">        return mapper::toDoc;</span>
+    }
+
+    @Bean
+    public RepositoryItemWriter&lt;CustomerDoc&gt; customerWriter(CustomerDocRepository repository) {
+<span class="fc" id="L46">        return new RepositoryItemWriterBuilder&lt;CustomerDoc&gt;()</span>
+<span class="fc" id="L47">                .repository(repository)</span>
+<span class="fc" id="L48">                .methodName(&quot;save&quot;)</span>
+<span class="fc" id="L49">                .build();</span>
+    }
+
+    @Bean
+    public Step importCustomersStep(JobRepository jobRepository,
+                                    PlatformTransactionManager transactionManager,
+                                    org.springframework.batch.item.data.RepositoryItemReader&lt;CustomerEntity&gt; reader,
+                                    ItemProcessor&lt;CustomerEntity, CustomerDoc&gt; processor,
+                                    RepositoryItemWriter&lt;CustomerDoc&gt; writer) {
+<span class="fc" id="L58">        return new StepBuilder(&quot;importCustomersStep&quot;, jobRepository)</span>
+<span class="fc" id="L59">                .&lt;CustomerEntity, CustomerDoc&gt;chunk(100, transactionManager)</span>
+<span class="fc" id="L60">                .reader(reader)</span>
+<span class="fc" id="L61">                .processor(processor)</span>
+<span class="fc" id="L62">                .writer(writer)</span>
+<span class="fc" id="L63">                .build();</span>
+    }
+
+    @Bean
+    public Job importCustomersJob(JobRepository jobRepository, Step importCustomersStep) {
+<span class="fc" id="L68">        return new JobBuilder(&quot;importCustomersJob&quot;, jobRepository)</span>
+<span class="fc" id="L69">                .incrementer(new RunIdIncrementer())</span>
+<span class="fc" id="L70">                .start(importCustomersStep)</span>
+<span class="fc" id="L71">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

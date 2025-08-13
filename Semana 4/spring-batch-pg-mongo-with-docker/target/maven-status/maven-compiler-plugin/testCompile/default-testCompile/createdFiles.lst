@@ -1,0 +1,7 @@
+com/tuempresa/batch/domain/postgres/CustomerEntityTest.class
+com/tuempresa/batch/job/BatchConfigTest.class
+com/tuempresa/batch/mapping/CustomerMapperTest.class
+com/tuempresa/batch/controller/BatchControllerTest.class
+com/tuempresa/batch/BatchApplicationTest.class
+com/tuempresa/batch/config/DataSourceConfigTest.class
+com/tuempresa/batch/domain/mongo/CustomerDocTest.class

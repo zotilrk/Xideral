@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BatchController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-batch-pg-mongo</a> &gt; <a href="index.source.html" class="el_package">com.tuempresa.batch.controller</a> &gt; <span class="el_source">BatchController.java</span></div><h1>BatchController.java</h1><pre class="source lang-java linenums">package com.tuempresa.batch.controller;
+
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.Instant;
+import java.util.Map;
+
+@RestController
+@RequestMapping(&quot;/api/batch/customers&quot;)
+public class BatchController {
+
+    private final JobLauncher jobLauncher;
+    private final Job importCustomersJob;
+
+<span class="fc" id="L21">    public BatchController(JobLauncher jobLauncher, Job importCustomersJob) {</span>
+<span class="fc" id="L22">        this.jobLauncher = jobLauncher;</span>
+<span class="fc" id="L23">        this.importCustomersJob = importCustomersJob;</span>
+<span class="fc" id="L24">    }</span>
+
+    @PostMapping(&quot;/run&quot;)
+    public ResponseEntity&lt;?&gt; runJob(@RequestParam(required = false) String runTag) throws Exception {
+<span class="fc" id="L28">        JobParameters params = new JobParametersBuilder()</span>
+<span class="fc" id="L29">                .addLong(&quot;ts&quot;, Instant.now().toEpochMilli())</span>
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">                .addString(&quot;runTag&quot;, runTag != null ? runTag : &quot;manual&quot;)</span>
+<span class="fc" id="L31">                .toJobParameters();</span>
+
+<span class="fc" id="L33">        JobExecution exec = jobLauncher.run(importCustomersJob, params);</span>
+<span class="fc" id="L34">        return ResponseEntity.accepted().body(Map.of(</span>
+<span class="fc" id="L35">                &quot;jobName&quot;, exec.getJobInstance().getJobName(),</span>
+<span class="fc" id="L36">                &quot;instanceId&quot;, exec.getJobInstance().getInstanceId(),</span>
+<span class="fc" id="L37">                &quot;executionId&quot;, exec.getId(),</span>
+<span class="fc" id="L38">                &quot;status&quot;, exec.getStatus().toString()</span>
+        ));
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

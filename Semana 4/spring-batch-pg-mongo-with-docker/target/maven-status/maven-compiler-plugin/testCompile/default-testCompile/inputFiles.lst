@@ -1,0 +1,7 @@
+/Users/krloz/Downloads/spring-batch-pg-mongo-with-docker/src/test/java/com/tuempresa/batch/domain/mongo/CustomerDocTest.java
+/Users/krloz/Downloads/spring-batch-pg-mongo-with-docker/src/test/java/com/tuempresa/batch/domain/postgres/CustomerEntityTest.java
+/Users/krloz/Downloads/spring-batch-pg-mongo-with-docker/src/test/java/com/tuempresa/batch/job/BatchConfigTest.java
+/Users/krloz/Downloads/spring-batch-pg-mongo-with-docker/src/test/java/com/tuempresa/batch/config/DataSourceConfigTest.java
+/Users/krloz/Downloads/spring-batch-pg-mongo-with-docker/src/test/java/com/tuempresa/batch/BatchApplicationTest.java
+/Users/krloz/Downloads/spring-batch-pg-mongo-with-docker/src/test/java/com/tuempresa/batch/controller/BatchControllerTest.java
+/Users/krloz/Downloads/spring-batch-pg-mongo-with-docker/src/test/java/com/tuempresa/batch/mapping/CustomerMapperTest.java
